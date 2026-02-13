@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ha">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arewa-mart Hub | @Bashful97</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .arewa-theme { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 pb-28">
+
+    <header class="sticky top-0 z-50 glass border-b border-emerald-100 p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 arewa-theme rounded-2xl flex items-center justify-center text-white font-black border-2 border-white shadow-lg">AH</div>
+            <div>
+                <h1 class="text-xl font-extrabold text-emerald-900 leading-none tracking-tight">AREWA-MART</h1>
+                <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-widest">By @Bashful97</p>
+            </div>
+        </div>
+        <button id="lang-btn" onclick="toggleLanguage()" class="arewa-theme text-white px-4 py-2 rounded-xl text-xs font-black shadow-md">EN / HA</button>
+    </header>
+
+    <section class="p-4">
+        <div class="arewa-theme rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden">
+            <h2 id="welcome-txt" class="text-3xl font-black mb-2">Barka da zuwa!</h2>
+            <p id="sub-txt" class="text-emerald-100 text-sm font-medium">Shagon kayayyaki da ayyuka na farko a Arewa.</p>
+            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        </div>
+    </section>
+
+    <div id="category-tabs" class="flex gap-3 overflow-x-auto px-4 py-2 no-scrollbar">
+        </div>
+
+    <main class="px-4 mt-4 grid grid-cols-2 gap-4" id="main-container">
+        </main>
+
+    <nav class="fixed bottom-0 w-full bg-white/80 border-t border-emerald-50 p-5 flex justify-around items-center glass shadow-2xl z-50 rounded-t-[2rem]">
+        <button onclick="filterType('product')" class="flex flex-col items-center gap-1 group">
+            <span class="text-2xl transition group-active:scale-125">🛍️</span>
+            <span class="text-[10px] font-black text-emerald-900 uppercase">Products</span>
+        </button>
+        <button onclick="filterType('service')" class="flex flex-col items-center gap-1 group">
+            <span class="text-2xl transition group-active:scale-125">🛠️</span>
+            <span class="text-[10px] font-black text-emerald-900 uppercase">Services</span>
+        </button>
+        <button onclick="alert('Developer: @Bashful97')" class="flex flex-col items-center gap-1 group opacity-40">
+            <span class="text-2xl">👤</span>
+            <span class="text-[10px] font-bold uppercase">Admin</span>
+        </button>
+    </nav>
+
+    <script>
+        let currentLang = 'ha';
+        let currentType = 'product'; // Default view
+
+        const data = {
+            products: [
+                { id: 1, name: "Smart Watch", price: 15, img: "⌚", cat: "tech" },
+                { id: 2, name: "Babban Riga", price: 40, img: "🧥", cat: "fashion" },
+                { id: 3, name: "Solar Battery", price: 85, img: "🔋", cat: "tech" }
+            ],
+            services: [
+                { id: 101, name: "Green House Setup", price: 500, img: "🌿", cat: "agro" },
+                { id: 102, name: "Solar Installation", price: 150, img: "☀️", cat: "tech" },
+                { id: 103, name: "Tailoring (Dinki)", price: 25, img: "🪡", cat: "fashion" }
+            ],
+            categories: [
+                { id: 'all', ha: "Duka", en: "All" },
+                { id: 'tech', ha: "Lantarki", en: "Tech" },
+                { id: 'fashion', ha: "Dinki/Tufafi", en: "Fashion" },
+                { id: 'agro', ha: "Noma", en: "Agro" }
+            ]
+        };
+
+        const uiText = {
+            ha: { welcome: "Barka da zuwa!", sub: "Shagon kayayyaki da ayyuka na farko a Arewa.", buy: "SAYA YANZU", order: "YIN ODA" },
+            en: { welcome: "Welcome!", sub: "The leading hub for products and services in Arewa.", buy: "BUY NOW", order: "ORDER SERVICE" }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ha' ? 'en' : 'ha';
+            renderApp();
+        }
+
+        function filterType(type) {
+            currentType = type;
+            renderApp();
+        }
+
+        function renderApp() {
+            document.getElementById('welcome-txt').innerText = uiText[currentLang].welcome;
+            document.getElementById('sub-txt').innerText = uiText[currentLang].sub;
+            
+            // Render Categories
+            const catContainer = document.getElementById('category-tabs');
+            catContainer.innerHTML = '';
+            data.categories.forEach(c => {
+                catContainer.innerHTML += `
+                    <button class="px-5 py-2 rounded-2xl border text-[10px] font-black whitespace-nowrap bg-white text-emerald-900 border-emerald-100 shadow-sm active:bg-emerald-600 active:text-white transition">
+                        ${currentLang === 'ha' ? c.ha : c.en}
+                    </button>
+                `;
+            });
+
+            // Render Content (Products or Services)
+            const mainContainer = document.getElementById('main-container');
+            mainContainer.innerHTML = '';
+            const items = currentType === 'product' ? data.products : data.services;
+            
+            items.forEach(item => {
+                mainContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-[2rem] shadow-sm border border-emerald-50 flex flex-col items-center">
+                        <div class="h-28 w-full bg-emerald-50/50 rounded-[1.5rem] flex items-center justify-center text-5xl mb-3">${item.img}</div>
+                        <h3 class="font-bold text-gray-800 text-[11px] text-center mb-1 uppercase tracking-tight">${item.name}</h3>
+                        <div class="flex items-center gap-1 mb-4">
+                            <span class="text-emerald-700 font-black text-xl italic">${item.price}</span>
+                            <span class="text-emerald-400 font-bold text-[10px]">π</span>
+                        </div>
+                        <button onclick="handleAction(${item.id})" class="w-full arewa-theme text-white py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg active:scale-90 transition">
+                            ${currentType === 'product' ? uiText[currentLang].buy : uiText[currentLang].order}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function handleAction(id) {
+            const btnText = currentType === 'product' ? uiText[currentLang].buy : uiText[currentLang].order;
+            alert(`${btnText}: An tura bukatar ku zuwa @Bashful97`);
+        }
+
+        const Pi = window.Pi;
+        Pi.init({ version: "2.0" });
+
+        window.onload = () => {
+            renderApp();
+            Pi.authenticate(['username', 'payments'], (p) => console.log(p));
+        };
+    </script>
+</body>
+      </html>
