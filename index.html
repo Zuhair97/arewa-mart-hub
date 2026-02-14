@@ -5,178 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arewa-mart Hub | @Bashful97</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f9fafb; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .arewa-theme { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-32">
+<body class="bg-gray-50 pb-28">
 
-    <header class="sticky top-0 z-50 glass border-b border-emerald-100 p-4 flex justify-between items-center">
+    <header class="sticky top-0 z-50 glass border-b border-emerald-100 p-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 arewa-theme rounded-xl flex items-center justify-center text-white font-black shadow-lg">AH</div>
-            <h1 class="text-lg font-black text-emerald-900 leading-none">AREWA-MART</h1>
+            <div class="w-12 h-12 arewa-theme rounded-2xl flex items-center justify-center text-white font-black border-2 border-white shadow-lg text-lg">AH</div>
+            <div>
+                <h1 class="text-xl font-extrabold text-emerald-900 leading-none">AREWA-MART</h1>
+                <p class="text-[9px] text-emerald-600 font-bold uppercase tracking-widest">Dev: @Bashful97</p>
+            </div>
         </div>
-        <div class="flex gap-2">
-            <button onclick="showCart()" class="relative p-2 bg-emerald-50 rounded-lg">
-                🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] px-1.5 rounded-full">0</span>
-            </button>
-            <button onclick="toggleLanguage()" class="bg-emerald-800 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">EN/HA</button>
-        </div>
+        <button onclick="toggleLanguage()" class="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-[10px] font-black border border-emerald-200 shadow-sm">EN / HA</button>
     </header>
 
-    <div id="main-view">
-        <div class="flex gap-3 overflow-x-auto px-4 py-4 no-scrollbar" id="cat-list">
+    <div id="app-content">
+        <section class="p-4">
+            <div class="arewa-theme rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden">
+                <h2 id="welcome-txt" class="text-3xl font-black mb-1">Barka da zuwa!</h2>
+                <p id="sub-txt" class="text-emerald-50 text-xs opacity-90">Shagon kayayyaki da ayyuka na farko a Arewa.</p>
             </div>
+        </section>
 
-        <main class="px-4 grid grid-cols-2 gap-4" id="items-grid"></main>
-    </div>
-
-    <div id="admin-view" class="hidden p-4">
-        <h2 class="text-xl font-black text-emerald-900 mb-4">Admin: Sarrafa Kaya</h2>
-        <div class="bg-white p-4 rounded-2xl shadow-sm mb-6 border border-emerald-100">
-            <input id="p-name" placeholder="Sunan Kaya" class="w-full mb-2 p-3 bg-gray-50 rounded-xl text-sm border-none outline-emerald-500">
-            <input id="p-price" type="number" placeholder="Farashi (Pi)" class="w-full mb-2 p-3 bg-gray-50 rounded-xl text-sm border-none outline-emerald-500">
-            <input id="p-img" placeholder="Hoto URL (misali: https://...)" class="w-full mb-4 p-3 bg-gray-50 rounded-xl text-sm border-none outline-emerald-500">
-            <button onclick="addItem()" class="w-full arewa-theme text-white py-3 rounded-xl font-bold">DAURA KAYA</button>
+        <div class="flex gap-4 px-6 py-2">
+            <button onclick="filterType('product')" class="font-black text-xs uppercase tracking-widest text-emerald-900 border-b-2 border-emerald-600 pb-1">Kaya</button>
+            <button onclick="filterType('service')" class="font-black text-xs uppercase tracking-widest text-gray-400 pb-1">Ayyuka</button>
         </div>
-        <div id="admin-items-list" class="space-y-2"></div>
+
+        <main class="px-4 mt-4 grid grid-cols-2 gap-4" id="main-container"></main>
     </div>
 
-    <div id="cart-modal" class="fixed inset-0 z-[100] hidden bg-black/50 p-6 flex items-center justify-center">
-        <div class="bg-white w-full rounded-3xl p-6 max-h-[80vh] overflow-y-auto">
-            <h3 class="text-lg font-black mb-4">Kwandon Saye (Cart)</h3>
-            <div id="cart-items" class="space-y-3 mb-6"></div>
-            <div class="border-t pt-4 mb-6">
-                <div class="flex justify-between font-black text-emerald-900 text-lg">
-                    <span>Jimilla:</span> <span id="cart-total">0 Pi</span>
-                </div>
+    <div id="admin-panel" class="hidden p-4">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-black text-emerald-900">Admin Dashboard</h2>
+            <button onclick="closeAdmin()" class="text-red-500 font-bold text-xs">KOMA BAYA</button>
+        </div>
+        <div id="order-list" class="space-y-4">
             </div>
-            <button onclick="checkout()" class="w-full arewa-theme text-white py-4 rounded-2xl font-black shadow-lg mb-2 uppercase">Tura Oda (Checkout)</button>
-            <button onclick="hideCart()" class="w-full text-gray-400 font-bold text-sm">Rufe</button>
-        </div>
     </div>
 
-    <footer class="p-6 text-center text-[10px] text-gray-400 mb-20">
-        <button onclick="alert('Privacy Policy: Mu a Arewa-mart ba ma siyar da bayanan ku ga wani bangare. Dukkan bayanan sayayya suna tsakanin ku da admin.')">Privacy Policy</button>
-    </footer>
-
-    <nav class="fixed bottom-0 w-full glass border-t p-4 flex justify-around items-center z-50">
-        <button onclick="showMain()" class="flex flex-col items-center opacity-100"><span class="text-xl">🏠</span><span class="text-[9px] font-black uppercase">Home</span></button>
-        <button onclick="enterAdmin()" class="flex flex-col items-center opacity-40"><span class="text-xl">🛠️</span><span class="text-[9px] font-black uppercase tracking-tighter">Admin Portal</span></button>
+    <nav class="fixed bottom-0 w-full bg-white/90 border-t border-emerald-50 p-5 flex justify-around items-center glass shadow-2xl z-50 rounded-t-[2.5rem]">
+        <button onclick="closeAdmin()" class="flex flex-col items-center gap-1"><span class="text-2xl">🛍️</span><span class="text-[9px] font-black text-emerald-900 uppercase">Shago</span></button>
+        <button onclick="openAdmin()" class="flex flex-col items-center gap-1"><span class="text-2xl">👤</span><span class="text-[9px] font-black text-emerald-900 uppercase tracking-tighter">Admin Portal</span></button>
     </nav>
 
     <script>
-        let cart = [];
-        let products = JSON.parse(localStorage.getItem('products')) || [
-            { id: 1, name: "Smart Watch", price: 15, img: "https://via.placeholder.com/150", cat: "tech" },
-            { id: 2, name: "Babban Riga", price: 40, img: "https://via.placeholder.com/150", cat: "fashion" }
-        ];
+        let currentLang = 'ha';
+        let currentType = 'product';
+        const adminPass = "Zuhafs9700";
+        
+        const data = {
+            products: [
+                { id: 1, name: "Smart Watch", price: 15, img: "⌚" },
+                { id: 2, name: "Babban Riga", price: 40, img: "🧥" },
+                { id: 3, name: "Solar Battery", price: 85, img: "🔋" }
+            ],
+            services: [
+                { id: 101, name: "Green House Setup", price: 500, img: "🌿" },
+                { id: 102, name: "Solar Installation", price: 150, img: "☀️" },
+                { id: 103, name: "Tailoring (Dinki)", price: 25, img: "🪡" }
+            ]
+        };
 
-        const categories = [
-            { id: 'tech', ha: "Lantarki", icon: "📱" },
-            { id: 'fashion', ha: "Tufafi", icon: "👕" },
-            { id: 'agro', ha: "Noma", icon: "🌾" }
-        ];
+        const Pi = window.Pi;
+        Pi.init({ version: "2.0" });
 
         function renderApp() {
-            // Render Categories
-            const catList = document.getElementById('cat-list');
-            catList.innerHTML = '';
-            categories.forEach(c => {
-                catList.innerHTML += `
-                    <div class="flex flex-col items-center gap-1 min-w-[70px]">
-                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-emerald-50 text-2xl">${c.icon}</div>
-                        <span class="text-[10px] font-bold text-emerald-900">${c.ha}</span>
-                    </div>
-                `;
-            });
-
-            // Render Products
-            const grid = document.getElementById('items-grid');
-            grid.innerHTML = '';
-            products.forEach(p => {
-                grid.innerHTML += `
-                    <div class="bg-white p-3 rounded-3xl shadow-sm border border-emerald-50">
-                        <img src="${p.img}" class="h-24 w-full object-cover rounded-2xl mb-2">
-                        <h4 class="text-[10px] font-bold truncate">${p.name}</h4>
-                        <p class="text-emerald-700 font-black text-sm mb-3">${p.price} Pi</p>
-                        <button onclick="addToCart(${p.id})" class="w-full bg-emerald-50 text-emerald-800 py-2 rounded-xl text-[10px] font-black uppercase">+ Cart</button>
+            const container = document.getElementById('main-container');
+            container.innerHTML = '';
+            const items = currentType === 'product' ? data.products : data.services;
+            
+            items.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-emerald-50 flex flex-col items-center">
+                        <div class="h-24 w-full bg-emerald-50/50 rounded-2xl flex items-center justify-center text-5xl mb-3">${item.img}</div>
+                        <h3 class="font-bold text-emerald-900 text-[10px] text-center mb-1 uppercase">${item.name}</h3>
+                        <p class="text-emerald-600 font-black text-lg mb-4 italic">${item.price} <span class="text-[10px] opacity-70">π</span></p>
+                        <button onclick="startPayment(${item.id})" class="w-full arewa-theme text-white py-3 rounded-2xl text-[10px] font-black uppercase shadow-lg active:scale-90 transition">SAYA YANZU</button>
                     </div>
                 `;
             });
         }
 
-        // Cart Logic
-        function addToCart(id) {
-            const p = products.find(x => x.id === id);
-            cart.push(p);
-            document.getElementById('cart-count').innerText = cart.length;
-            alert("An sa " + p.name + " a kwando!");
-        }
-
-        function showCart() {
-            const modal = document.getElementById('cart-modal');
-            const list = document.getElementById('cart-items');
-            list.innerHTML = '';
-            let total = 0;
-            cart.forEach((item, index) => {
-                total += item.price;
-                list.innerHTML += `<div class="flex justify-between text-sm"><span>${item.name}</span><b>${item.price} Pi</b></div>`;
-            });
-            document.getElementById('cart-total').innerText = total + " Pi";
-            modal.classList.remove('hidden');
-        }
-
-        function hideCart() { document.getElementById('cart-modal').classList.add('hidden'); }
-
-        // Admin Logic
-        function enterAdmin() {
-            let p = prompt("Password:");
-            if(p === "Zuhafs9700") {
-                document.getElementById('main-view').classList.add('hidden');
-                document.getElementById('admin-view').classList.remove('hidden');
-                renderAdminList();
+        async function startPayment(id) {
+            const item = [...data.products, ...data.services].find(i => i.id === id);
+            
+            try {
+                // Adana Oda a matsayin "Observation"
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders.push({ name: item.name, price: item.price, date: new Date().toLocaleString() });
+                localStorage.setItem('orders', JSON.stringify(orders));
+                
+                alert("An kaddamar da tsarin biya: " + item.name + ". Ana jiran amincewar Pi Wallet dinku.");
+            } catch (e) {
+                alert("Kuskure ya faru wajen biya.");
             }
         }
 
-        function addItem() {
-            const name = document.getElementById('p-name').value;
-            const price = parseFloat(document.getElementById('p-price').value);
-            const img = document.getElementById('p-img').value || "https://via.placeholder.com/150";
-            if(name && price) {
-                products.push({ id: Date.now(), name, price, img });
-                localStorage.setItem('products', JSON.stringify(products));
-                renderApp(); renderAdminList();
-                alert("An dora!");
+        function openAdmin() {
+            let input = prompt("Saka Admin Password:");
+            if (input === adminPass) {
+                document.getElementById('app-content').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                renderOrders();
+            } else {
+                alert("Password ba dai-dai ba!");
             }
         }
 
-        function deleteItem(id) {
-            products = products.filter(p => p.id !== id);
-            localStorage.setItem('products', JSON.stringify(products));
-            renderApp(); renderAdminList();
+        function closeAdmin() {
+            document.getElementById('app-content').classList.remove('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
         }
 
-        function renderAdminList() {
-            const list = document.getElementById('admin-items-list');
-            list.innerHTML = '';
-            products.forEach(p => {
+        function renderOrders() {
+            const list = document.getElementById('order-list');
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            list.innerHTML = orders.length ? '' : '<p class="text-gray-400 text-center py-10">Babu masu oda tukunna.</p>';
+            
+            orders.reverse().forEach(o => {
                 list.innerHTML += `
-                    <div class="bg-gray-100 p-3 rounded-xl flex justify-between items-center text-xs">
-                        <span>${p.name} (${p.price} Pi)</span>
-                        <button onclick="deleteItem(${p.id})" class="text-red-500 font-bold">Goge</button>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 border-emerald-500">
+                        <div class="flex justify-between font-black text-emerald-900"><span>${o.name}</span><span>${o.price}π</span></div>
+                        <div class="text-[10px] text-gray-400 mt-1">${o.date}</div>
                     </div>
                 `;
             });
         }
 
-        function showMain() {
-            document.getElementById('main-view').classList.remove('hidden');
-            document.getElementById('admin-view').classList.add('hidden');
+        function filterType(type) {
+            currentType = type;
+            renderApp();
         }
 
         window.onload = renderApp;
