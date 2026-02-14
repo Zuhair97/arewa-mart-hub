@@ -3,85 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arewa-mart Hub | @Bashful97</title>
+    <title>Pi-mart Arewa | @Bashful97</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        /* Koren Arewa mai nuna daukaka */
-        .arewa-theme { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
-        .text-arewa { color: #064e3b; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); }
+        .arewa-gradient { background: linear-gradient(135deg, #1e4d2b 0%, #2d5a27 100%); }
     </style>
 </head>
-<body class="bg-gray-50 pb-24 font-sans">
+<body class="bg-gray-50 pb-24">
 
-    <header class="sticky top-0 z-50 glass border-b border-gray-200 p-4 flex justify-between items-center shadow-sm">
+    <header class="sticky top-0 z-50 glass border-b p-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-3">
-            <div class="w-12 h-12 arewa-theme rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg border-2 border-white">
-                AH
+            <div class="w-10 h-10 arewa-gradient rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                PM
             </div>
             <div>
-                <h1 class="text-xl font-black text-emerald-900 tracking-tight uppercase">Arewa-mart Hub</h1>
-                <p class="text-[10px] text-emerald-700 font-bold tracking-widest">DEVELOPED BY @BASHFUL97</p>
+                <h1 class="text-lg font-extrabold text-green-900 leading-none">Pi-mart Arewa</h1>
+                <p class="text-[10px] text-gray-500 font-medium">Dev: @Bashful97</p>
             </div>
         </div>
         
-        <button id="lang-btn" onclick="toggleLanguage()" class="arewa-theme text-white px-4 py-2 rounded-xl text-xs font-black shadow-md active:scale-90 transition">
-            EN / HA
+        <button id="lang-btn" onclick="toggleLanguage()" class="bg-gray-100 border px-3 py-1 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
+            English / Hausa
         </button>
     </header>
 
     <section class="p-4">
-        <div class="relative overflow-hidden bg-white border border-emerald-100 rounded-3xl p-6 shadow-sm">
-            <div class="relative z-10">
-                <h2 id="welcome-txt" class="text-2xl font-extrabold text-emerald-900">Barka da zuwa!</h2>
-                <p id="sub-txt" class="text-emerald-700 text-sm mt-1">Hanyarku ta musayar Pi cikin sauki da amana.</p>
-            </div>
-            <div class="absolute -right-4 -top-4 w-24 h-24 arewa-theme opacity-10 rounded-full"></div>
+        <div class="arewa-gradient rounded-2xl p-6 text-white shadow-lg">
+            <h2 id="welcome-txt" class="text-2xl font-bold">Barka da zuwa!</h2>
+            <p id="sub-txt" class="text-green-100 text-sm">Shagon Pi mafi aminci a Arewa.</p>
         </div>
     </section>
 
     <main class="px-4 grid grid-cols-2 gap-4" id="products-container">
         </main>
 
-    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-100 p-4 flex justify-around items-center glass shadow-2xl">
-        <button class="flex flex-col items-center gap-1">
-            <span class="text-xl">🏠</span>
-            <span class="text-[10px] font-black text-emerald-900">HOME</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 opacity-40">
-            <span class="text-xl">🛒</span>
-            <span class="text-[10px] font-bold text-gray-500">CART</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 opacity-40">
-            <span class="text-xl">👤</span>
-            <span class="text-[10px] font-bold text-gray-500">ADMIN</span>
-        </button>
+    <nav class="fixed bottom-0 w-full bg-white border-t p-4 flex justify-around items-center glass">
+        <button class="text-green-800 font-bold text-xs flex flex-col items-center"><span>🏠</span>Home</button>
+        <button class="text-gray-400 text-xs flex flex-col items-center"><span>🛒</span>Cart</button>
+        <button class="text-gray-400 text-xs flex flex-col items-center"><span>👤</span>Profile</button>
     </nav>
 
     <script>
-        let currentLang = 'ha';
+        let currentLang = 'ha'; // Default language
 
         const content = {
             ha: {
                 welcome: "Barka da zuwa!",
-                sub: "Hanyarku ta musayar Pi cikin sauki da amana.",
+                sub: "Shagon Pi mafi aminci a Arewa.",
                 buy: "SAYA YANZU",
-                alert: "An tura bayanan zuwa ga @Bashful97!"
+                loading: "Ana tantancewa...",
+                alert: "An kammala sayen kaya!"
             },
             en: {
-                welcome: "Welcome to Arewa-mart!",
-                sub: "Your most trusted hub for Pi transactions.",
+                welcome: "Welcome!",
+                sub: "The most trusted Pi store in the North.",
                 buy: "BUY NOW",
-                alert: "Order sent to @Bashful97!"
+                loading: "Authenticating...",
+                alert: "Purchase Successful!"
             }
         };
 
         const products = [
-            { id: 1, name: "Smart Watch", price: 15.0, img: "⌚" },
-            { id: 2, name: "Arewa Hoodie", price: 20.5, img: "👕" },
-            { id: 3, name: "Solar Charger", price: 12.0, img: "🔋" },
-            { id: 4, name: "Wireless Earbuds", price: 18.0, img: "🎧" }
+            { id: 1, name: "Smart Watch", price: 15, img: "⌚" },
+            { id: 2, name: "Pi Hoodie", price: 25, img: "👕" },
+            { id: 3, name: "Power Bank", price: 10, img: "🔋" },
+            { id: 4, name: "Headphones", price: 12, img: "🎧" }
         ];
 
         function toggleLanguage() {
@@ -98,14 +86,11 @@
             
             products.forEach(p => {
                 container.innerHTML += `
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex flex-col hover:border-emerald-200 transition">
-                        <div class="h-32 bg-emerald-50 rounded-2xl flex items-center justify-center text-5xl mb-3">${p.img}</div>
-                        <h3 class="font-bold text-gray-800 text-sm truncate">${p.name}</h3>
-                        <div class="flex items-center gap-1 mt-1">
-                            <span class="text-emerald-700 font-black text-lg italic">${p.price}</span>
-                            <span class="text-emerald-400 font-bold text-[10px]">π</span>
-                        </div>
-                        <button onclick="handlePurchase(${p.id})" class="mt-4 w-full arewa-theme text-white py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider active:scale-95 transition">
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="h-32 bg-gray-50 rounded-xl flex items-center justify-center text-4xl mb-2">${p.img}</div>
+                        <h3 class="font-bold text-gray-800 text-sm">${p.name}</h3>
+                        <p class="text-green-700 font-black">${p.price} π</p>
+                        <button onclick="handlePurchase(${p.id})" class="mt-2 w-full arewa-gradient text-white py-2 rounded-lg text-[10px] font-bold">
                             ${content[currentLang].buy}
                         </button>
                     </div>
@@ -113,25 +98,27 @@
             });
         }
 
-        // Pi SDK Logic
+        // Pi SDK Integration
         const Pi = window.Pi;
         Pi.init({ version: "2.0" });
 
-        async function initPi() {
+        async function authenticateUser() {
             try {
-                await Pi.authenticate(['username', 'payments'], (p) => console.log(p));
+                const auth = await Pi.authenticate(['username', 'payments'], (p) => console.log(p));
+                console.log("Logged in as: " + auth.user.username);
             } catch (e) {
-                console.log("Not in Pi Browser");
+                console.error(e);
             }
         }
 
         function handlePurchase(id) {
+            // Logic na biyan kudi da muka rubuta a baya
             alert(content[currentLang].alert);
         }
 
         window.onload = () => {
             renderApp();
-            initPi();
+            authenticateUser();
         };
     </script>
 </body>
