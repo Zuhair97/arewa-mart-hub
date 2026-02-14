@@ -3,123 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi-mart Arewa | @Bashful97</title>
+    <title>Arewa-mart Hub | @Bashful97</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
     <style>
-        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); }
-        .arewa-gradient { background: linear-gradient(135deg, #1e4d2b 0%, #2d5a27 100%); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .arewa-theme { background: linear-gradient(135deg, #065f46 0%, #059669 100%); }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .active-cat { border: 2px solid #059669; transform: scale(1.05); }
     </style>
 </head>
-<body class="bg-gray-50 pb-24">
+<body class="pb-32">
 
-    <header class="sticky top-0 z-50 glass border-b p-4 flex justify-between items-center shadow-sm">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 arewa-gradient rounded-full flex items-center justify-center text-white font-bold shadow-md">
-                PM
-            </div>
-            <div>
-                <h1 class="text-lg font-extrabold text-green-900 leading-none">Pi-mart Arewa</h1>
-                <p class="text-[10px] text-gray-500 font-medium">Dev: @Bashful97</p>
-            </div>
+    <header class="sticky top-0 z-50 glass border-b border-emerald-50 p-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 arewa-theme rounded-xl flex items-center justify-center text-white font-black shadow-lg">AH</div>
+            <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tighter" id="app-title">Arewa-mart</h1>
         </div>
-        
-        <button id="lang-btn" onclick="toggleLanguage()" class="bg-gray-100 border px-3 py-1 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
-            English / Hausa
-        </button>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleLang()" class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase" id="lang-btn">English</button>
+            <button onclick="showCart()" class="p-2.5 bg-gray-50 rounded-full relative">🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">0</span></button>
+        </div>
     </header>
 
-    <section class="p-4">
-        <div class="arewa-gradient rounded-2xl p-6 text-white shadow-lg">
-            <h2 id="welcome-txt" class="text-2xl font-bold">Barka da zuwa!</h2>
-            <p id="sub-txt" class="text-green-100 text-sm">Shagon Pi mafi aminci a Arewa.</p>
+    <div id="main-view">
+        <div class="p-4">
+            <input type="text" id="search-box" onkeyup="filterItems()" placeholder="Nemi kaya..." class="w-full p-4 bg-white rounded-2xl shadow-sm border border-emerald-50 text-sm outline-none focus:border-emerald-500">
         </div>
-    </section>
 
-    <main class="px-4 grid grid-cols-2 gap-4" id="products-container">
+        <div class="flex gap-4 overflow-x-auto px-5 py-4 no-scrollbar" id="cat-nav">
+            <div onclick="setCategory('all')" class="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer">
+                <div class="w-14 h-14 bg-emerald-900 rounded-2xl flex items-center justify-center text-white text-xs font-bold shadow-md">ALL</div>
+                <span class="text-[9px] font-bold uppercase text-emerald-900" data-ha="Duka" data-en="All">Duka</span>
+            </div>
+            <div onclick="setCategory('tech')" class="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden shadow-md"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100" class="w-full h-full object-cover"></div>
+                <span class="text-[9px] font-bold uppercase text-gray-500">Tech</span>
+            </div>
+            <div onclick="setCategory('fashion')" class="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden shadow-md"><img src="https://images.unsplash.com/photo-1590038767624-dac5740a997b?w=100" class="w-full h-full object-cover"></div>
+                <span class="text-[9px] font-bold uppercase text-gray-500">Fashion</span>
+            </div>
+            <div onclick="setCategory('agro')" class="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden shadow-md"><img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=100" class="w-full h-full object-cover"></div>
+                <span class="text-[9px] font-bold uppercase text-gray-500">Agro</span>
+            </div>
+            <div onclick="setCategory('services')" class="flex flex-col items-center gap-2 min-w-[80px] cursor-pointer">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden shadow-md"><img src="https://images.unsplash.com/photo-1581578731522-7b754775b058?w=100" class="w-full h-full object-cover"></div>
+                <span class="text-[9px] font-bold uppercase text-gray-500">Services</span>
+            </div>
+        </div>
+
+        <main class="px-4 grid grid-cols-2 gap-4 mt-2" id="items-grid">
+            <p class="col-span-2 text-center py-20 text-gray-400 font-bold text-xs">Loda bayanai...</p>
         </main>
+    </div>
 
-    <nav class="fixed bottom-0 w-full bg-white border-t p-4 flex justify-around items-center glass">
-        <button class="text-green-800 font-bold text-xs flex flex-col items-center"><span>🏠</span>Home</button>
-        <button class="text-gray-400 text-xs flex flex-col items-center"><span>🛒</span>Cart</button>
-        <button class="text-gray-400 text-xs flex flex-col items-center"><span>👤</span>Profile</button>
+    <div id="admin-view" class="hidden p-6 animate-slide-up">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-black text-emerald-900 uppercase" data-ha="Sashin Admin" data-en="Admin Panel">Sashin Admin</h2>
+            <button onclick="showMain()" class="text-xs font-bold text-red-500">RUFE</button>
+        </div>
+        <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-emerald-50 mb-10">
+            <input id="p-name" placeholder="Sunan Kaya" class="w-full mb-3 p-4 bg-gray-50 rounded-2xl text-sm outline-none border-2 border-transparent focus:border-emerald-500">
+            <input id="p-price" type="number" placeholder="Farashi (Pi)" class="w-full mb-3 p-4 bg-gray-50 rounded-2xl text-sm outline-none">
+            <select id="p-cat" class="w-full mb-4 p-4 bg-gray-50 rounded-2xl text-sm font-bold text-emerald-800">
+                <option value="tech">Tech & Phones</option>
+                <option value="fashion">Fashion & Wears</option>
+                <option value="agro">Agro & Products</option>
+                <option value="services">Home Services</option>
+            </select>
+            <label class="block mb-6 cursor-pointer">
+                <div class="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-6 text-center text-gray-400 text-[10px] font-bold uppercase">Danna don saka Hoto/Video</div>
+                <input type="file" id="p-file" accept="image/*,video/*" class="hidden">
+            </label>
+            <button id="upload-btn" onclick="uploadToFirebase()" class="w-full arewa-theme text-white py-4 rounded-2xl font-black shadow-xl uppercase tracking-widest">Adana Kaya</button>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-6 left-6 right-6 h-20 glass border border-white/50 rounded-[2.5rem] flex justify-around items-center shadow-2xl z-50">
+        <button onclick="showMain()" class="text-2xl">🏠</button>
+        <button onclick="enterAdmin()" class="text-2xl">⚙️</button>
     </nav>
 
     <script>
-        let currentLang = 'ha'; // Default language
-
-        const content = {
-            ha: {
-                welcome: "Barka da zuwa!",
-                sub: "Shagon Pi mafi aminci a Arewa.",
-                buy: "SAYA YANZU",
-                loading: "Ana tantancewa...",
-                alert: "An kammala sayen kaya!"
-            },
-            en: {
-                welcome: "Welcome!",
-                sub: "The most trusted Pi store in the North.",
-                buy: "BUY NOW",
-                loading: "Authenticating...",
-                alert: "Purchase Successful!"
-            }
+        // FIREBASE CONFIG (Your actual keys)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAWJMF1tg5XoTtWAqZVeKdmNgufl-PFt3E",
+            authDomain: "arewa-mart-1663d.firebaseapp.com",
+            projectId: "arewa-mart-1663d",
+            storageBucket: "arewa-mart-1663d.firebasestorage.app",
+            messagingSenderId: "782392811138",
+            appId: "1:782392811138:web:4017800076060962239e9b"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-        const products = [
-            { id: 1, name: "Smart Watch", price: 15, img: "⌚" },
-            { id: 2, name: "Pi Hoodie", price: 25, img: "👕" },
-            { id: 3, name: "Power Bank", price: 10, img: "🔋" },
-            { id: 4, name: "Headphones", price: 12, img: "🎧" }
-        ];
+        let currentLang = 'ha';
+        let currentCategory = 'all';
 
-        function toggleLanguage() {
+        function toggleLang() {
             currentLang = currentLang === 'ha' ? 'en' : 'ha';
-            renderApp();
+            document.getElementById('lang-btn').innerText = currentLang === 'ha' ? 'English' : 'Hausa';
+            document.querySelectorAll('[data-ha]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+            loadProducts();
         }
 
-        function renderApp() {
-            document.getElementById('welcome-txt').innerText = content[currentLang].welcome;
-            document.getElementById('sub-txt').innerText = content[currentLang].sub;
+        function setCategory(cat) {
+            currentCategory = cat;
+            loadProducts();
+        }
+
+        function loadProducts() {
+            const grid = document.getElementById('items-grid');
+            const isAdmin = !document.getElementById('admin-view').classList.contains('hidden');
             
-            const container = document.getElementById('products-container');
-            container.innerHTML = '';
-            
-            products.forEach(p => {
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="h-32 bg-gray-50 rounded-xl flex items-center justify-center text-4xl mb-2">${p.img}</div>
-                        <h3 class="font-bold text-gray-800 text-sm">${p.name}</h3>
-                        <p class="text-green-700 font-black">${p.price} π</p>
-                        <button onclick="handlePurchase(${p.id})" class="mt-2 w-full arewa-gradient text-white py-2 rounded-lg text-[10px] font-bold">
-                            ${content[currentLang].buy}
-                        </button>
-                    </div>
-                `;
+            let query = db.collection("products").orderBy("createdAt", "desc");
+            if (currentCategory !== 'all') {
+                query = query.where("category", "==", currentCategory);
+            }
+
+            query.onSnapshot((snapshot) => {
+                grid.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const p = doc.data();
+                    const id = doc.id;
+                    grid.innerHTML += `
+                        <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-emerald-50 relative animate-fade-in">
+                            <img src="${p.url}" class="h-36 w-full object-cover rounded-[1.5rem] mb-3">
+                            <div class="px-2 pb-2">
+                                <h4 class="text-[9px] font-black text-emerald-950 uppercase truncate">${p.name}</h4>
+                                <p class="text-emerald-600 font-black text-xs mb-3">${p.price} Pi</p>
+                                ${isAdmin ? 
+                                    `<button onclick="deleteProduct('${id}')" class="w-full bg-red-100 text-red-600 py-2 rounded-xl text-[9px] font-black uppercase">Goge 🗑️</button>` : 
+                                    `<button class="w-full bg-emerald-900 text-white py-2.5 rounded-xl text-[9px] font-black uppercase tracking-tighter">${currentLang === 'ha' ? 'Saye' : 'Buy'}</button>`
+                                }
+                            </div>
+                        </div>`;
+                });
             });
         }
 
-        // Pi SDK Integration
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0" });
+        async function uploadToFirebase() {
+            const name = document.getElementById('p-name').value;
+            const price = document.getElementById('p-price').value;
+            const cat = document.getElementById('p-cat').value;
+            const file = document.getElementById('p-file').files[0];
+            const btn = document.getElementById('upload-btn');
 
-        async function authenticateUser() {
+            if (!name || !price || !file) return alert("Cike komai don Allah!");
+            btn.innerText = "Loda kaya..."; btn.disabled = true;
+
             try {
-                const auth = await Pi.authenticate(['username', 'payments'], (p) => console.log(p));
-                console.log("Logged in as: " + auth.user.username);
-            } catch (e) {
-                console.error(e);
+                const storageRef = storage.ref(`products/${Date.now()}_${file.name}`);
+                await storageRef.put(file);
+                const url = await storageRef.getDownloadURL();
+                await db.collection("products").add({
+                    name, price: parseFloat(price), category: cat, url, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("An adana kaya a sashin " + cat);
+                showMain();
+            } catch (e) { alert("An samu matsala!"); }
+            btn.innerText = "Adana Kaya"; btn.disabled = false;
+        }
+
+        function enterAdmin() {
+            if(prompt("Password:") === "Zuhafs9700") {
+                document.getElementById('main-view').classList.add('hidden');
+                document.getElementById('admin-view').classList.remove('hidden');
+                loadProducts();
             }
         }
 
-        function handlePurchase(id) {
-            // Logic na biyan kudi da muka rubuta a baya
-            alert(content[currentLang].alert);
+        function showMain() {
+            document.getElementById('main-view').classList.remove('hidden');
+            document.getElementById('admin-view').classList.add('hidden');
+            loadProducts();
         }
 
-        window.onload = () => {
-            renderApp();
-            authenticateUser();
-        };
+        async function deleteProduct(id) {
+            if(confirm("Goge wannan?")) await db.collection("products").doc(id).delete();
+        }
+
+        window.onload = loadProducts;
     </script>
 </body>
 </html>
