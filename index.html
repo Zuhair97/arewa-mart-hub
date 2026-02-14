@@ -21,10 +21,7 @@
     <header class="sticky top-0 z-50 glass border-b border-emerald-50 p-5 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 arewa-theme rounded-2xl flex items-center justify-center text-white font-black shadow-lg">AH</div>
-            <div>
-                <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tighter leading-none">Arewa-mart</h1>
-                <span class="text-[8px] font-bold text-emerald-600 uppercase tracking-widest">Master Admin</span>
-            </div>
+            <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tighter">Arewa-mart Hub</h1>
         </div>
         <button onclick="showCart()" class="relative p-2.5 bg-emerald-50 rounded-full">
             🛒 <span id="cart-count" class="absolute -top-1 -right-1 bg-emerald-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-black">0</span>
@@ -33,76 +30,57 @@
 
     <div id="main-view">
         <div class="flex gap-4 overflow-x-auto px-5 py-6 no-scrollbar">
-            <div class="flex flex-col items-center gap-2 min-w-[90px]">
-                <div class="w-16 h-16 rounded-3xl overflow-hidden shadow-md border-2 border-white">
-                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200" class="w-full h-full object-cover">
-                </div>
-                <span class="text-[8px] font-black text-emerald-900 uppercase">Tech</span>
+            <div class="flex flex-col items-center gap-2 min-w-[80px]">
+                <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl shadow-sm">📱</div>
+                <span class="text-[9px] font-black text-emerald-900 uppercase">Lantarki</span>
             </div>
-            <div class="flex flex-col items-center gap-2 min-w-[90px]">
-                <div class="w-16 h-16 rounded-3xl overflow-hidden shadow-md border-2 border-white">
-                    <img src="https://images.unsplash.com/photo-1590038767624-dac5740a997b?w=200" class="w-full h-full object-cover">
-                </div>
-                <span class="text-[8px] font-black text-emerald-900 uppercase">Fashion</span>
+            <div class="flex flex-col items-center gap-2 min-w-[80px]">
+                <div class="w-14 h-14 bg-pink-50 rounded-2xl flex items-center justify-center text-2xl shadow-sm">👕</div>
+                <span class="text-[9px] font-black text-emerald-900 uppercase">Tufafi</span>
             </div>
-            <div class="flex flex-col items-center gap-2 min-w-[90px]">
-                <div class="w-16 h-16 rounded-3xl overflow-hidden shadow-md border-2 border-white">
-                    <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=200" class="w-full h-full object-cover">
-                </div>
-                <span class="text-[8px] font-black text-emerald-900 uppercase">Agro</span>
+            <div class="flex flex-col items-center gap-2 min-w-[80px]">
+                <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl shadow-sm">🌾</div>
+                <span class="text-[9px] font-black text-emerald-900 uppercase">Noma</span>
             </div>
-            <div class="flex flex-col items-center gap-2 min-w-[90px]">
-                <div class="w-16 h-16 rounded-3xl overflow-hidden shadow-md border-2 border-white">
-                    <img src="https://images.unsplash.com/photo-1581578731522-7b754775b058?w=200" class="w-full h-full object-cover">
-                </div>
-                <span class="text-[8px] font-black text-emerald-900 uppercase">Services</span>
+            <div class="flex flex-col items-center gap-2 min-w-[80px]">
+                <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl shadow-sm">🪡</div>
+                <span class="text-[9px] font-black text-emerald-900 uppercase">Dinki</span>
             </div>
         </div>
 
         <main class="px-4 grid grid-cols-2 gap-4" id="items-grid">
-            <p class="col-span-2 text-center py-20 text-gray-400 font-bold text-[10px] uppercase animate-pulse">Loda kaya...</p>
+            <p class="col-span-2 text-center py-20 text-gray-400 font-bold text-xs animate-pulse">ANA LODA KAYA DAGA DATABASE...</p>
         </main>
     </div>
 
     <div id="admin-view" class="hidden p-6">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-black text-emerald-900 uppercase">Admin Dashboard</h2>
-            <button onclick="showMain()" class="text-[10px] font-black bg-red-50 text-red-500 px-4 py-2 rounded-full uppercase">Koma Baya</button>
+            <h2 class="text-xl font-black text-emerald-900">Admin Panel</h2>
+            <button onclick="showMain()" class="text-xs font-bold text-red-500">RUFE</button>
         </div>
         <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-emerald-50 mb-10">
-            <input id="p-name" placeholder="Suna (Misali: Zanna Cap)" class="w-full mb-3 p-4 bg-gray-50 rounded-2xl text-sm outline-none">
+            <input id="p-name" placeholder="Sunan Kaya" class="w-full mb-3 p-4 bg-gray-50 rounded-2xl text-sm outline-none border-2 border-transparent focus:border-emerald-500">
             <input id="p-price" type="number" placeholder="Farashi (Pi)" class="w-full mb-3 p-4 bg-gray-50 rounded-2xl text-sm outline-none">
-            
-            <select id="p-cat" class="w-full mb-4 p-4 bg-gray-50 rounded-2xl text-sm font-bold text-emerald-800 outline-none">
-                <optgroup label="TECH">
-                    <option value="phones">Phones/Laptops/Accessories</option>
-                    <option value="electronics">Electronics/Electric Bikes</option>
-                    <option value="kitchen">Kitchen Utensils</option>
-                </optgroup>
-                <optgroup label="FASHION">
-                    <option value="men">Arewa Men Dresses/Zanna</option>
-                    <option value="yards">Shedda/Atamfa/Lace</option>
-                    <option value="kids">Kid's Dresses</option>
-                    <option value="accessories">Shoes/Bags/Hijabs</option>
-                </optgroup>
-                <optgroup label="AGRO">
-                    <option value="agro-inputs">Seeds/Fertilizer/Feed</option>
-                    <option value="agro-produce">Rice/Beans/Eggs/Chicken</option>
-                </optgroup>
-                <optgroup label="SERVICES">
-                    <option value="craft">Plumbing/Carpentry/Bricklaying</option>
-                    <option value="interior">Interior Decorations</option>
-                </optgroup>
-            </select>
-
             <label class="block mb-6 cursor-pointer">
-                <div class="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-6 text-center text-gray-400">
-                    <span id="file-label" class="text-[10px] font-black uppercase tracking-widest">Zabi Hoton Gaske</span>
+                <div class="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-6 text-center text-gray-400 text-xs">
+                    Danna don zabo Hoto/Video
                 </div>
-                <input type="file" id="p-file" accept="image/*" class="hidden" onchange="document.getElementById('file-label').innerText = 'Hoto ya hau!'">
+                <input type="file" id="p-file" accept="image/*,video/*" class="hidden">
             </label>
-            
-            <button id="upload-btn" onclick="uploadToFirebase()" class="w-full arewa-theme text-white py-4 rounded-2xl font-black shadow-xl tracking-widest uppercase">ADANA KAYA</button>
+            <button id="upload-btn" onclick="uploadToFirebase()" class="w-full arewa-theme text-white py-4 rounded-2xl font-black shadow-xl">ADANA HAR ABADA</button>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="fixed inset-0 z-[100] hidden bg-black/40 backdrop-blur-md flex items-end">
+        <div class="bg-white w-full rounded-t-[3rem] p-8 shadow-2xl">
+            <h3 class="text-xl font-black text-emerald-900 mb-6">Kwandon Saye</h3>
+            <div id="cart-items" class="space-y-3 mb-8 max-h-40 overflow-y-auto pr-2 no-scrollbar"></div>
+            <div class="flex justify-between items-center mb-8 border-t pt-6">
+                <span class="text-gray-400 font-bold text-xs uppercase">Jimilla</span>
+                <span id="cart-total" class="text-2xl font-black text-emerald-800">0 Pi</span>
+            </div>
+            <button onclick="alert('An tura oda zuwa Admin!')" class="w-full arewa-theme text-white py-5 rounded-2xl font-black shadow-xl mb-3">TURA ODA</button>
+            <button onclick="hideCart()" class="w-full text-gray-400 font-bold text-xs">RUFE</button>
         </div>
     </div>
 
@@ -112,6 +90,7 @@
     </nav>
 
     <script>
+        // 1. FIREBASE CONFIGURATION (Lantarkin da ka turo!)
         const firebaseConfig = {
             apiKey: "AIzaSyAWJMF1tg5XoTtWAqZVeKdmNgufl-PFt3E",
             authDomain: "arewa-mart-1663d.firebaseapp.com",
@@ -126,25 +105,20 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
+        let cart = [];
+
         function loadProducts() {
-            const isAdmin = !document.getElementById('admin-view').classList.contains('hidden');
             db.collection("products").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
                 const grid = document.getElementById('items-grid');
                 grid.innerHTML = '';
                 snapshot.forEach((doc) => {
                     const p = doc.data();
-                    const id = doc.id;
                     grid.innerHTML += `
-                        <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-emerald-50 relative overflow-hidden">
-                            <img src="${p.url}" class="h-36 w-full object-cover rounded-[1.5rem] mb-3">
-                            <div class="px-2 pb-2">
-                                <h4 class="text-[9px] font-black text-emerald-950 uppercase truncate">${p.name}</h4>
-                                <p class="text-emerald-600 font-black text-xs mb-3">${p.price} Pi</p>
-                                ${isAdmin ? 
-                                    `<button onclick="deleteProduct('${id}')" class="w-full bg-red-100 text-red-600 py-2 rounded-xl text-[9px] font-black uppercase">Goge 🗑️</button>` : 
-                                    `<button onclick="alert('An saka a kwando!')" class="w-full bg-emerald-900 text-white py-2.5 rounded-xl text-[9px] font-black uppercase tracking-tighter">Saye</button>`
-                                }
-                            </div>
+                        <div class="bg-white p-3 rounded-[2rem] shadow-sm border border-emerald-50">
+                            <img src="${p.url}" class="h-32 w-full object-cover rounded-[1.5rem] mb-3">
+                            <h4 class="text-[10px] font-black text-emerald-950 px-1 uppercase truncate">${p.name}</h4>
+                            <p class="text-emerald-600 font-black text-xs mb-3 px-1">${p.price} Pi</p>
+                            <button onclick="addToCart('${p.name}', ${p.price})" class="w-full bg-emerald-900 text-white py-2.5 rounded-2xl text-[10px] font-black">+ KWANDO</button>
                         </div>`;
                 });
             });
@@ -153,48 +127,39 @@
         async function uploadToFirebase() {
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
-            const cat = document.getElementById('p-cat').value;
             const file = document.getElementById('p-file').files[0];
             const btn = document.getElementById('upload-btn');
 
             if (!name || !price || !file) return alert("Cike komai!");
-            btn.innerText = "ADANAWA..."; btn.disabled = true;
 
-            try {
-                const storageRef = storage.ref(`products/${Date.now()}_${file.name}`);
-                await storageRef.put(file);
-                const url = await storageRef.getDownloadURL();
-                await db.collection("products").add({
-                    name, price: parseFloat(price), category: cat, url, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("An adana kaya nasara!");
-                showMain();
-            } catch (e) { alert("An samu matsala!"); }
-            btn.innerText = "ADANA KAYA"; btn.disabled = false;
+            btn.innerText = "Ana Adanawa...";
+            btn.disabled = true;
+
+            const storageRef = storage.ref(`products/${Date.now()}_${file.name}`);
+            await storageRef.put(file);
+            const url = await storageRef.getDownloadURL();
+
+            await db.collection("products").add({
+                name, price: parseFloat(price), url, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            alert("An adana kaya!");
+            btn.innerText = "ADANA HAR ABADA";
+            btn.disabled = false;
+            showMain();
         }
 
-        async function deleteProduct(id) {
-            if(confirm("Kana da tabbas kana son goge wannan kayan?")) {
-                await db.collection("products").doc(id).delete();
-                alert("An goge!");
-            }
+        function addToCart(name, price) { cart.push({name, price}); document.getElementById('cart-count').innerText = cart.length; }
+        function showCart() {
+            const list = document.getElementById('cart-items');
+            list.innerHTML = ''; let total = 0;
+            cart.forEach(i => { total += i.price; list.innerHTML += `<div class='flex justify-between text-xs font-bold p-3 bg-gray-50 rounded-xl'><span>${i.name}</span><span>${i.price}π</span></div>`; });
+            document.getElementById('cart-total').innerText = total + " Pi";
+            document.getElementById('cart-modal').classList.remove('hidden');
         }
-
-        function showMain() { 
-            document.getElementById('main-view').classList.remove('hidden'); 
-            document.getElementById('admin-view').classList.add('hidden'); 
-            loadProducts(); 
-        }
-
-        function enterAdmin() { 
-            if(prompt("Password:") === "Zuhafs9700") { 
-                document.getElementById('main-view').classList.add('hidden'); 
-                document.getElementById('admin-view').classList.remove('hidden'); 
-                loadProducts(); 
-            } 
-        }
-
-        function showCart() { alert("Tsarin kwando yana nan tafe!"); }
+        function hideCart() { document.getElementById('cart-modal').classList.add('hidden'); }
+        function showMain() { document.getElementById('main-view').classList.remove('hidden'); document.getElementById('admin-view').classList.add('hidden'); }
+        function enterAdmin() { if(prompt("Password:") === "Zuhafs9700") { document.getElementById('main-view').classList.add('hidden'); document.getElementById('admin-view').classList.remove('hidden'); } }
 
         window.onload = loadProducts;
     </script>
