@@ -16,9 +16,11 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
         .pi-gradient { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
-        .cat-item { transition: all 0.3s; min-width: 90px; cursor: pointer; }
-        .cat-item.active { border: 2.5px solid #059669; background: #ecfdf5; transform: translateY(-2px); }
+        .cat-item { transition: all 0.3s; min-width: 90px; cursor: pointer; border: 2px solid transparent; }
+        .cat-item.active { border: 2px solid #059669; background: #ecfdf5; transform: translateY(-2px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="pb-32">
@@ -76,8 +78,8 @@
                 <option value="tech">Tech</option><option value="fashion">Fashion</option>
                 <option value="agro">Agro</option><option value="services">Services</option>
             </select>
-            <input id="in-img" placeholder="Postimages Direct Link" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
-            <button onclick="publish()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">SAVE</button>
+            <input id="in-img" placeholder="Manna Direct Link (Postimg)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <button onclick="publish()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">LODA KAYA</button>
         </div>
         <div id="manage-list" class="space-y-3 bg-white p-4 rounded-3xl border mb-20"></div>
         <button onclick="closeAdmin()" class="w-full py-4 text-gray-400 font-bold text-[10px] uppercase">Back</button>
@@ -87,7 +89,7 @@
         <div class="bg-white w-full max-h-[70vh] rounded-[3rem] p-8 relative overflow-y-auto">
             <h2 class="font-black text-emerald-900 mb-4 uppercase text-sm">Privacy Policy</h2>
             <div class="text-[11px] text-gray-500 space-y-4">
-                <p>Arewa-mart Hub by @Bashful97. We only use Pi username for orders. No passphrases stored.</p>
+                <p>Arewa-mart Hub developed by @Bashful97. We only use Pi username for order processing. No wallet passphrases are ever requested.</p>
             </div>
             <button onclick="togglePrivacy(false)" class="w-full pi-gradient text-white py-4 rounded-2xl font-black mt-8">OK</button>
         </div>
@@ -108,12 +110,15 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // PI SDK
         const Pi = window.Pi;
         async function initPi() {
             try {
                 Pi.init({ version: "2.0", sandbox: true });
-                await Pi.authenticate(['username', 'payments'], (onIncomplete) => {});
-            } catch (e) { console.error(e); }
+                await Pi.authenticate(['username', 'payments'], (onIncomplete) => {
+                    console.log("Incomplete Payment: ", onIncomplete);
+                });
+            } catch (e) { console.warn("Pi SDK not ready yet"); }
         }
 
         let lang = 'ha'; let filter = 'all';
@@ -139,25 +144,28 @@
             const img = document.getElementById('in-img').value;
             if(!name || !price || !img) return alert("Cike komai!");
             await db.collection("products").add({ name, price: parseFloat(price), category: cat, url: img, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("Success!");
+            alert("An adana!");
             closeAdmin();
         }
 
+        // STEP 10 FIX: Direct Pi Payment
         async function handlePayment(itemName, itemPrice) {
             try {
                 const paymentData = {
                     amount: parseFloat(itemPrice),
-                    memo: "Biyan " + itemName,
+                    memo: "Siyan " + itemName + " a Arewa-mart Hub",
                     metadata: { productName: itemName }
                 };
                 const callbacks = {
-                    onReadyForServerApproval: (id) => { console.log("Approval", id); },
-                    onReadyForServerCompletion: (id, txid) => { alert("Kammalawa! TXID: " + txid); },
-                    onCancel: (id) => { alert("Fasawa"); },
+                    onReadyForServerApproval: (id) => { console.log("Approved", id); },
+                    onReadyForServerCompletion: (id, txid) => { alert("Nasara! Transaction ID: " + txid); },
+                    onCancel: (id) => { alert("An fasa biya."); },
                     onError: (e, p) => { alert("Error: " + e.message); }
                 };
                 await Pi.createPayment(paymentData, callbacks);
-            } catch (err) { alert("Use Pi Browser!"); }
+            } catch (err) {
+                alert("Tabbatar kana cikin Pi Browser.");
+            }
         }
 
         function render() {
@@ -169,8 +177,8 @@
                     const p = doc.data();
                     if(filter === 'all' || p.category === filter) {
                         grid.innerHTML += `
-                        <div class="bg-white p-2 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                            <img src="${p.url}" class="h-36 w-full object-cover rounded-[2rem] mb-2" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                        <div class="bg-white p-2 rounded-[2.5rem] border border-gray-100 shadow-sm animate-fade-in">
+                            <img src="${p.url}" class="h-36 w-full object-cover rounded-[2rem] mb-2" onerror="this.src='https://i.postimg.cc/qRqMd44D/unnamed-5-1.jpg'">
                             <div class="px-3 pb-1 text-center">
                                 <h4 class="text-[10px] font-black uppercase truncate text-emerald-950">${p.name}</h4>
                                 <p class="text-emerald-600 font-extrabold text-xs mb-3">${p.price} Pi</p>
@@ -180,15 +188,15 @@
                             </div>
                         </div>`;
                     }
-                    manage.innerHTML += `<div class="flex justify-between p-3 border-b text-[10px] font-bold"><span>${p.name}</span><button onclick="del('${doc.id}')" class="text-red-500">GOGE</button></div>`;
+                    manage.innerHTML += `<div class="flex justify-between p-3 border-b text-[10px] font-bold"><span>${p.name}</span><button onclick="del('${doc.id}')" class="text-red-500 font-black">GOGE</button></div>`;
                 });
             });
         }
 
         function togglePrivacy(s) { document.getElementById('privacy-modal').classList.toggle('hidden', !s); }
-        function openAdmin() { if(prompt("Pass:") === "Zuhafs9700") { document.getElementById('main-view').classList.add('hidden'); document.getElementById('admin-view').classList.remove('hidden'); } }
+        function openAdmin() { if(prompt("Password:") === "Zuhafs9700") { document.getElementById('main-view').classList.add('hidden'); document.getElementById('admin-view').classList.remove('hidden'); } }
         function closeAdmin() { document.getElementById('main-view').classList.remove('hidden'); document.getElementById('admin-view').classList.add('hidden'); }
-        async function del(id) { if(confirm("Goge?")) await db.collection("products").doc(id).delete(); }
+        async function del(id) { if(confirm("Goge wannan kaya?")) await db.collection("products").doc(id).delete(); }
 
         window.onload = () => { initPi(); render(); };
     </script>
