@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arewa-mart | Pi Network Utility</title>
+    <title>Arewa-mart Hub | @Bashful97</title>
     
     <script src="https://sdk.mine.pi/pi-sdk.js"></script>
     
@@ -13,75 +13,100 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .pi-gradient { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
-        .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; }
-        .cat-card.active { border: 2.5px solid #059669; background: #ecfdf5; transform: scale(1.05); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+        .pi-primary { background: #059669; }
+        .pi-gradient { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
+        .cat-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); min-width: 90px; }
+        .cat-item.active { border: 2px solid #059669; background: #ecfdf5; transform: translateY(-2px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="pb-28">
+<body class="pb-32">
 
-    <header class="sticky top-0 z-50 glass-nav p-4 flex justify-between items-center shadow-sm">
-        <div class="flex items-center gap-2">
-            <div class="w-10 h-10 pi-gradient rounded-2xl flex items-center justify-center text-white font-black shadow-lg">AM</div>
+    <header class="sticky top-0 z-50 glass-nav p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 pi-gradient rounded-2xl flex items-center justify-center text-white font-black shadow-lg">AM</div>
             <div>
-                <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tight leading-none">Arewa-mart</h1>
-                <span id="pi-user" class="text-[8px] text-emerald-600 font-bold uppercase">Guest Pioneer</span>
+                <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tighter">Arewa-mart</h1>
+                <p id="dev-tag" class="text-[9px] font-bold text-emerald-600 uppercase">Dev: @Bashful97</p>
             </div>
         </div>
-        <button onclick="changeLang()" id="lang-btn" class="bg-emerald-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">ENGLISH</button>
+        <div class="flex gap-2">
+            <button onclick="changeLang()" id="lang-btn" class="bg-emerald-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">ENGLISH</button>
+        </div>
     </header>
 
-    <div id="ui-main">
+    <div id="main-view">
         <div class="flex gap-4 overflow-x-auto p-4 no-scrollbar">
-            <div onclick="applyFilter('all')" id="tab-all" class="cat-card active flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border min-w-[85px]">
+            <div onclick="setTab('all')" id="tab-all" class="cat-item active flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
                 <img src="https://cdn-icons-png.flaticon.com/128/263/263142.png" class="w-8 h-8 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="DUKA" data-en="ALL">DUKA</span>
             </div>
-            <div onclick="applyFilter('tech')" id="tab-tech" class="cat-card flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border min-w-[85px]">
+            <div onclick="setTab('tech')" id="tab-tech" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
                 <img src="https://cdn-icons-png.flaticon.com/128/644/644458.png" class="w-8 h-8 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="LANTAKRI" data-en="TECH">LANTAKRI</span>
             </div>
-            <div onclick="applyFilter('fashion')" id="tab-fashion" class="cat-card flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border min-w-[85px]">
+            <div onclick="setTab('fashion')" id="tab-fashion" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
                 <img src="https://cdn-icons-png.flaticon.com/128/3050/3050239.png" class="w-8 h-8 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="TUFAFI" data-en="FASHION">TUFAFI</span>
             </div>
-            <div onclick="applyFilter('agro')" id="tab-agro" class="cat-card flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border min-w-[85px]">
+            <div onclick="setTab('agro')" id="tab-agro" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
                 <img src="https://cdn-icons-png.flaticon.com/128/1887/1887043.png" class="w-8 h-8 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="NOMA" data-en="AGRO">NOMA</span>
             </div>
-            <div onclick="applyFilter('services')" id="tab-services" class="cat-card flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border min-w-[85px]">
+            <div onclick="setTab('services')" id="tab-services" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
                 <img src="https://cdn-icons-png.flaticon.com/128/1067/1067561.png" class="w-8 h-8 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="AIYUKA" data-en="SERVICES">AIYUKA</span>
             </div>
         </div>
-        <main class="px-4 grid grid-cols-2 gap-4 mt-2" id="product-grid"></main>
-    </div>
 
-    <div id="ui-admin" class="hidden p-6">
-        <h2 class="text-xl font-black text-emerald-900 mb-6 trans" data-ha="SASHIN ADMIN" data-en="ADMIN PANEL">SASHIN ADMIN</h2>
-        <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border space-y-4 mb-10">
-            <input id="p-name" placeholder="Sunan Kaya" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-            <input id="p-price" type="number" placeholder="Farashi (Pi)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-            <select id="p-cat" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
-                <option value="tech">Tech</option><option value="fashion">Fashion</option>
-                <option value="agro">Agro</option><option value="services">Services</option>
-            </select>
-            <input id="p-img" placeholder="Link din hoto" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-            <button onclick="saveData()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">SAVE ITEM</button>
+        <main class="px-4 grid grid-cols-2 gap-4" id="item-grid"></main>
+
+        <div class="p-8 text-center">
+            <button onclick="togglePrivacy(true)" class="text-[10px] text-gray-400 underline uppercase font-bold trans" data-ha="Ka'idojin Sirri" data-en="Privacy Policy">Ka'idojin Sirri</button>
         </div>
-        <div id="admin-manage-list" class="space-y-3 bg-white p-4 rounded-3xl border"></div>
-        <button onclick="exitAdmin()" class="w-full py-8 text-gray-400 font-bold uppercase text-xs">Back</button>
     </div>
 
-    <nav class="fixed bottom-6 left-6 right-6 h-16 glass-nav border rounded-full flex justify-around items-center shadow-2xl z-50">
-        <button onclick="exitAdmin()" class="text-2xl">🏠</button>
-        <button onclick="enterAdmin()" class="text-2xl">⚙️</button>
+    <div id="admin-view" class="hidden p-6 animate-fade-in">
+        <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border space-y-4 mb-8">
+            <h3 class="font-black text-emerald-900 text-sm uppercase">Sabon Kaya</h3>
+            <input id="in-name" placeholder="Sunan Kaya" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <input id="in-price" type="number" placeholder="Farashi (Pi)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <select id="in-cat" class="w-full p-4 bg-gray-50 rounded-2xl font-bold text-sm">
+                <option value="tech">Tech & Electronics</option>
+                <option value="fashion">Fashion & Wears</option>
+                <option value="agro">Agro & Food</option>
+                <option value="services">Services</option>
+            </select>
+            <input id="in-img" placeholder="Manna Image Link (e.g. postimg.cc)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <button onclick="publish()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">LODA KAYA</button>
+        </div>
+
+        <div id="manage-list" class="space-y-3 bg-white p-4 rounded-3xl border"></div>
+        <button onclick="closeAdmin()" class="w-full py-8 text-gray-400 font-bold text-[10px] uppercase">Koma Baya</button>
+    </div>
+
+    <div id="privacy-modal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="bg-white w-full max-h-[70vh] rounded-[2.5rem] p-8 relative overflow-y-auto">
+            <h2 class="font-black text-emerald-900 mb-4 uppercase">Privacy Policy</h2>
+            <div class="text-[11px] text-gray-500 space-y-3 leading-relaxed">
+                <p><strong>Arewa-mart Hub (@Bashful97)</strong> is committed to protecting Pioneer data.</p>
+                <p>1. We only access your Pi Username via SDK for order fulfillment.</p>
+                <p>2. No wallet passphrases are ever requested or stored.</p>
+                <p>3. Payments are handled strictly through Pi Network official APIs.</p>
+            </div>
+            <button onclick="togglePrivacy(false)" class="w-full pi-gradient text-white py-4 rounded-2xl font-black mt-6">NA FAHIMTA</button>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-6 left-10 right-10 h-16 glass-nav border rounded-full flex justify-around items-center shadow-2xl z-50">
+        <button onclick="closeAdmin()" class="text-2xl">🏠</button>
+        <button onclick="openAdmin()" class="text-2xl">⚙️</button>
     </nav>
 
     <script>
-        // FIREBASE
+        // FIREBASE SETUP
         const firebaseConfig = {
             apiKey: "AIzaSyAWJMF1tg5XoTtWAqZVeKdmNgufl-PFt3E",
             authDomain: "arewa-mart-1663d.firebaseapp.com",
@@ -91,81 +116,72 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // PI SDK INITIALIZATION
+        // PI SDK INIT
         const Pi = window.Pi;
         async function initPi() {
             try {
-                const scopes = ['username', 'payments'];
-                function onIncompletePaymentFound(payment) { /* Handle incomplete payments */ };
-                
-                Pi.init({ version: "2.0", sandbox: true }); // Sandbox: true domin yanzu muna gwaji ne
-                
-                const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
-                document.getElementById('pi-user').innerText = auth.user.username;
-                console.log("Pioneer Authenticated: " + auth.user.username);
-            } catch (err) {
-                console.log("Not in Pi Browser or error: ", err);
-            }
+                Pi.init({ version: "2.0", sandbox: true });
+                const auth = await Pi.authenticate(['username', 'payments'], (pay) => {});
+                console.log("Welcome " + auth.user.username);
+            } catch (e) { console.error(e); }
         }
 
-        // Rest of the logic (Language, Filter, CRUD)
-        let langMode = 'ha'; let filterNow = 'all';
+        let lang = 'ha'; let filter = 'all';
+
         function changeLang() {
-            langMode = (langMode === 'ha') ? 'en' : 'ha';
-            document.getElementById('lang-btn').innerText = (langMode === 'ha') ? 'ENGLISH' : 'HAUSA';
-            document.querySelectorAll('.trans').forEach(el => el.innerText = el.getAttribute('data-' + langMode));
-            loadProducts();
+            lang = (lang === 'ha') ? 'en' : 'ha';
+            document.getElementById('lang-btn').innerText = (lang === 'ha') ? 'ENGLISH' : 'HAUSA';
+            document.querySelectorAll('.trans').forEach(el => el.innerText = el.getAttribute('data-' + lang));
+            render();
         }
 
-        function applyFilter(cat) {
-            filterNow = cat;
-            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('tab-' + cat).classList.add('active');
-            loadProducts();
+        function setTab(t) {
+            filter = t;
+            document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + t).classList.add('active');
+            render();
         }
 
-        async function saveData() {
-            const name = document.getElementById('p-name').value;
-            const price = document.getElementById('p-price').value;
-            const cat = document.getElementById('p-cat').value;
-            const img = document.getElementById('p-img').value;
+        async function publish() {
+            const name = document.getElementById('in-name').value;
+            const price = document.getElementById('in-price').value;
+            const cat = document.getElementById('in-cat').value;
+            const img = document.getElementById('in-img').value;
+            if(!name || !price || !img) return alert("Cike komai!");
             await db.collection("products").add({ name, price: parseFloat(price), category: cat, url: img, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            location.reload();
+            alert("An Adana!");
+            closeAdmin();
         }
 
-        function loadProducts() {
-            const grid = document.getElementById('product-grid');
-            const manageList = document.getElementById('admin-manage-list');
+        function render() {
+            const grid = document.getElementById('item-grid');
+            const manage = document.getElementById('manage-list');
             db.collection("products").orderBy("createdAt", "desc").onSnapshot(snap => {
-                grid.innerHTML = ''; manageList.innerHTML = '';
+                grid.innerHTML = ''; manage.innerHTML = '';
                 snap.forEach(doc => {
                     const p = doc.data();
-                    if (filterNow === 'all' || p.category === filterNow) {
+                    if(filter === 'all' || p.category === filter) {
                         grid.innerHTML += `
-                            <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-white">
-                                <img src="${p.url}" class="h-32 w-full object-cover rounded-[1.5rem] mb-2" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
-                                <div class="px-2">
+                            <div class="bg-white p-2 rounded-[2rem] border-2 border-white shadow-sm overflow-hidden">
+                                <img src="${p.url}" class="h-36 w-full object-cover rounded-[1.5rem] mb-2" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                                <div class="px-2 pb-1">
                                     <h4 class="text-[10px] font-black uppercase truncate text-emerald-950">${p.name}</h4>
-                                    <p class="text-emerald-600 font-extrabold text-xs mb-3">${p.price} Pi</p>
-                                    <button onclick="handlePayment('${p.name}', ${p.price})" class="w-full pi-gradient text-white py-2 rounded-2xl text-[9px] font-black uppercase shadow-md">${langMode === 'ha' ? 'SAYE' : 'BUY'}</button>
+                                    <p class="text-emerald-600 font-extrabold text-xs mb-2">${p.price} Pi</p>
+                                    <button class="w-full pi-gradient text-white py-2 rounded-2xl text-[9px] font-black uppercase shadow-md">${lang === 'ha' ? 'SAYE' : 'BUY'}</button>
                                 </div>
                             </div>`;
                     }
-                    manageList.innerHTML += `<div class="flex justify-between items-center border-b py-2 text-[10px] font-bold"><span>${p.name}</span><button onclick="deleteProd('${doc.id}')" class="text-red-500">GOGE</button></div>`;
+                    manage.innerHTML += `<div class="flex justify-between p-3 border-b text-[10px] font-bold italic"><span>${p.name}</span><button onclick="del('${doc.id}')" class="text-red-500">DELETE</button></div>`;
                 });
             });
         }
 
-        async function handlePayment(name, amount) {
-            alert(langMode === 'ha' ? "Ana kokarin hadawa da Pi Wallet..." : "Connecting to Pi Wallet...");
-            // Anan ne nan gaba zamu saka Pi.createPayment(...)
-        }
+        function togglePrivacy(s) { document.getElementById('privacy-modal').classList.toggle('hidden', !s); }
+        function openAdmin() { if(prompt("Password:") === "Zuhafs9700") { document.getElementById('main-view').classList.add('hidden'); document.getElementById('admin-view').classList.remove('hidden'); render(); } }
+        function closeAdmin() { document.getElementById('main-view').classList.remove('hidden'); document.getElementById('admin-view').classList.add('hidden'); render(); }
+        async function del(id) { if(confirm("Goge?")) await db.collection("products").doc(id).delete(); }
 
-        function enterAdmin() { if(prompt("Pass:") === "Zuhafs9700") { document.getElementById('ui-main').classList.add('hidden'); document.getElementById('ui-admin').classList.remove('hidden'); } }
-        function exitAdmin() { document.getElementById('ui-main').classList.remove('hidden'); document.getElementById('ui-admin').classList.add('hidden'); }
-        async function deleteProd(id) { if(confirm("Goge?")) await db.collection("products").doc(id).delete(); }
-
-        window.onload = () => { initPi(); loadProducts(); };
+        window.onload = () => { initPi(); render(); };
     </script>
 </body>
 </html>
