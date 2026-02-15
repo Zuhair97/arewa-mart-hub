@@ -18,85 +18,83 @@
         .pi-gradient { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
         .cat-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); min-width: 90px; }
-        .cat-item.active { border: 2px solid #059669; background: #ecfdf5; transform: translateY(-2px); }
+        .cat-item.active { border: 2.5px solid #059669; background: #ecfdf5; transform: translateY(-2px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-32">
 
-    <header class="sticky top-0 z-50 glass-nav p-4 flex justify-between items-center">
+    <header class="sticky top-0 z-50 glass-nav p-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-3">
-            <div class="w-11 h-11 pi-gradient rounded-2xl flex items-center justify-center text-white font-black shadow-lg">AM</div>
+            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-md bg-white border border-gray-100 flex items-center justify-center">
+                <img src="https://i.postimg.cc/qRqMd44D/unnamed-5-1.jpg" 
+                     class="w-full h-full object-cover" 
+                     alt="Arewa-mart Logo">
+            </div>
             <div>
-                <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tighter">Arewa-mart</h1>
-                <p id="dev-tag" class="text-[9px] font-bold text-emerald-600 uppercase">Dev: @Bashful97</p>
+                <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tighter leading-none">Arewa-mart</h1>
+                <p class="text-[9px] font-bold text-emerald-600 uppercase mt-1">Dev: @Bashful97</p>
             </div>
         </div>
-        <div class="flex gap-2">
-            <button onclick="changeLang()" id="lang-btn" class="bg-emerald-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">ENGLISH</button>
-        </div>
+        <button onclick="changeLang()" id="lang-btn" class="bg-emerald-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-sm">ENGLISH</button>
     </header>
 
     <div id="main-view">
         <div class="flex gap-4 overflow-x-auto p-4 no-scrollbar">
             <div onclick="setTab('all')" id="tab-all" class="cat-item active flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
-                <img src="https://cdn-icons-png.flaticon.com/128/263/263142.png" class="w-8 h-8 mb-1">
+                <img src="https://cdn-icons-png.flaticon.com/128/263/263142.png" class="w-7 h-7 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="DUKA" data-en="ALL">DUKA</span>
             </div>
             <div onclick="setTab('tech')" id="tab-tech" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
-                <img src="https://cdn-icons-png.flaticon.com/128/644/644458.png" class="w-8 h-8 mb-1">
+                <img src="https://cdn-icons-png.flaticon.com/128/644/644458.png" class="w-7 h-7 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="LANTAKRI" data-en="TECH">LANTAKRI</span>
             </div>
             <div onclick="setTab('fashion')" id="tab-fashion" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
-                <img src="https://cdn-icons-png.flaticon.com/128/3050/3050239.png" class="w-8 h-8 mb-1">
+                <img src="https://cdn-icons-png.flaticon.com/128/3050/3050239.png" class="w-7 h-7 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="TUFAFI" data-en="FASHION">TUFAFI</span>
             </div>
             <div onclick="setTab('agro')" id="tab-agro" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
-                <img src="https://cdn-icons-png.flaticon.com/128/1887/1887043.png" class="w-8 h-8 mb-1">
+                <img src="https://cdn-icons-png.flaticon.com/128/1887/1887043.png" class="w-7 h-7 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="NOMA" data-en="AGRO">NOMA</span>
             </div>
             <div onclick="setTab('services')" id="tab-services" class="cat-item flex flex-col items-center p-3 rounded-3xl bg-white shadow-sm border cursor-pointer">
-                <img src="https://cdn-icons-png.flaticon.com/128/1067/1067561.png" class="w-8 h-8 mb-1">
+                <img src="https://cdn-icons-png.flaticon.com/128/1067/1067561.png" class="w-7 h-7 mb-1">
                 <span class="text-[9px] font-bold trans" data-ha="AIYUKA" data-en="SERVICES">AIYUKA</span>
             </div>
         </div>
 
         <main class="px-4 grid grid-cols-2 gap-4" id="item-grid"></main>
 
-        <div class="p-8 text-center">
+        <div class="p-10 text-center">
             <button onclick="togglePrivacy(true)" class="text-[10px] text-gray-400 underline uppercase font-bold trans" data-ha="Ka'idojin Sirri" data-en="Privacy Policy">Ka'idojin Sirri</button>
         </div>
     </div>
 
-    <div id="admin-view" class="hidden p-6 animate-fade-in">
+    <div id="admin-view" class="hidden p-6">
         <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border space-y-4 mb-8">
-            <h3 class="font-black text-emerald-900 text-sm uppercase">Sabon Kaya</h3>
-            <input id="in-name" placeholder="Sunan Kaya" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
-            <input id="in-price" type="number" placeholder="Farashi (Pi)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <h3 class="font-black text-emerald-900 text-xs uppercase">Add New Product</h3>
+            <input id="in-name" placeholder="Name" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <input id="in-price" type="number" placeholder="Price in Pi" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
             <select id="in-cat" class="w-full p-4 bg-gray-50 rounded-2xl font-bold text-sm">
-                <option value="tech">Tech & Electronics</option>
-                <option value="fashion">Fashion & Wears</option>
-                <option value="agro">Agro & Food</option>
-                <option value="services">Services</option>
+                <option value="tech">Tech</option><option value="fashion">Fashion</option>
+                <option value="agro">Agro</option><option value="services">Services</option>
             </select>
-            <input id="in-img" placeholder="Manna Image Link (e.g. postimg.cc)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
-            <button onclick="publish()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">LODA KAYA</button>
+            <input id="in-img" placeholder="Direct Image URL (Postimages)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <button onclick="publish()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">PUBLISH</button>
         </div>
-
         <div id="manage-list" class="space-y-3 bg-white p-4 rounded-3xl border"></div>
-        <button onclick="closeAdmin()" class="w-full py-8 text-gray-400 font-bold text-[10px] uppercase">Koma Baya</button>
+        <button onclick="closeAdmin()" class="w-full py-8 text-gray-400 font-bold text-[10px] uppercase">Back Home</button>
     </div>
 
     <div id="privacy-modal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
-        <div class="bg-white w-full max-h-[70vh] rounded-[2.5rem] p-8 relative overflow-y-auto">
-            <h2 class="font-black text-emerald-900 mb-4 uppercase">Privacy Policy</h2>
-            <div class="text-[11px] text-gray-500 space-y-3 leading-relaxed">
-                <p><strong>Arewa-mart Hub (@Bashful97)</strong> is committed to protecting Pioneer data.</p>
-                <p>1. We only access your Pi Username via SDK for order fulfillment.</p>
-                <p>2. No wallet passphrases are ever requested or stored.</p>
-                <p>3. Payments are handled strictly through Pi Network official APIs.</p>
+        <div class="bg-white w-full max-h-[70vh] rounded-[3rem] p-8 relative overflow-y-auto shadow-2xl">
+            <h2 class="font-black text-emerald-900 mb-4 uppercase text-sm">Privacy Policy</h2>
+            <div class="text-[11px] text-gray-500 space-y-4 leading-relaxed">
+                <p><strong>Arewa-mart Hub</strong> developed by <strong>@Bashful97</strong>.</p>
+                <p>We respect Pioneer privacy. We only use your Pi username to identify orders. No financial data or passphrases are ever requested.</p>
+                <p>Transactions are handled via official Pi SDK.</p>
             </div>
-            <button onclick="togglePrivacy(false)" class="w-full pi-gradient text-white py-4 rounded-2xl font-black mt-6">NA FAHIMTA</button>
+            <button onclick="togglePrivacy(false)" class="w-full pi-gradient text-white py-4 rounded-2xl font-black mt-8">OK</button>
         </div>
     </div>
 
@@ -106,7 +104,6 @@
     </nav>
 
     <script>
-        // FIREBASE SETUP
         const firebaseConfig = {
             apiKey: "AIzaSyAWJMF1tg5XoTtWAqZVeKdmNgufl-PFt3E",
             authDomain: "arewa-mart-1663d.firebaseapp.com",
@@ -116,14 +113,13 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // PI SDK INIT
         const Pi = window.Pi;
         async function initPi() {
             try {
                 Pi.init({ version: "2.0", sandbox: true });
-                const auth = await Pi.authenticate(['username', 'payments'], (pay) => {});
-                console.log("Welcome " + auth.user.username);
-            } catch (e) { console.error(e); }
+                const auth = await Pi.authenticate(['username', 'payments'], (p) => {});
+                console.log("Authenticated");
+            } catch (e) {}
         }
 
         let lang = 'ha'; let filter = 'all';
@@ -147,9 +143,9 @@
             const price = document.getElementById('in-price').value;
             const cat = document.getElementById('in-cat').value;
             const img = document.getElementById('in-img').value;
-            if(!name || !price || !img) return alert("Cike komai!");
+            if(!name || !price || !img) return alert("Fill all fields");
             await db.collection("products").add({ name, price: parseFloat(price), category: cat, url: img, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("An Adana!");
+            alert("Success!");
             closeAdmin();
         }
 
@@ -162,16 +158,16 @@
                     const p = doc.data();
                     if(filter === 'all' || p.category === filter) {
                         grid.innerHTML += `
-                            <div class="bg-white p-2 rounded-[2rem] border-2 border-white shadow-sm overflow-hidden">
-                                <img src="${p.url}" class="h-36 w-full object-cover rounded-[1.5rem] mb-2" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
-                                <div class="px-2 pb-1">
+                            <div class="bg-white p-2 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                                <img src="${p.url}" class="h-36 w-full object-cover rounded-[2rem] mb-2" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                                <div class="px-3 pb-1">
                                     <h4 class="text-[10px] font-black uppercase truncate text-emerald-950">${p.name}</h4>
-                                    <p class="text-emerald-600 font-extrabold text-xs mb-2">${p.price} Pi</p>
-                                    <button class="w-full pi-gradient text-white py-2 rounded-2xl text-[9px] font-black uppercase shadow-md">${lang === 'ha' ? 'SAYE' : 'BUY'}</button>
+                                    <p class="text-emerald-600 font-extrabold text-xs mb-3">${p.price} Pi</p>
+                                    <button class="w-full pi-gradient text-white py-2.5 rounded-2xl text-[9px] font-black uppercase shadow-md">${lang === 'ha' ? 'SAYE' : 'BUY'}</button>
                                 </div>
                             </div>`;
                     }
-                    manage.innerHTML += `<div class="flex justify-between p-3 border-b text-[10px] font-bold italic"><span>${p.name}</span><button onclick="del('${doc.id}')" class="text-red-500">DELETE</button></div>`;
+                    manage.innerHTML += `<div class="flex justify-between p-3 border-b text-[10px] font-bold"><span>${p.name}</span><button onclick="del('${doc.id}')" class="text-red-500 underline">DEL</button></div>`;
                 });
             });
         }
@@ -179,7 +175,7 @@
         function togglePrivacy(s) { document.getElementById('privacy-modal').classList.toggle('hidden', !s); }
         function openAdmin() { if(prompt("Password:") === "Zuhafs9700") { document.getElementById('main-view').classList.add('hidden'); document.getElementById('admin-view').classList.remove('hidden'); render(); } }
         function closeAdmin() { document.getElementById('main-view').classList.remove('hidden'); document.getElementById('admin-view').classList.add('hidden'); render(); }
-        async function del(id) { if(confirm("Goge?")) await db.collection("products").doc(id).delete(); }
+        async function del(id) { if(confirm("Delete?")) await db.collection("products").doc(id).delete(); }
 
         window.onload = () => { initPi(); render(); };
     </script>
