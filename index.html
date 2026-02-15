@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arewa-mart | @Bashful97</title>
+    <title>Arewa-mart | Pi Network Utility</title>
+    
+    <script src="https://sdk.mine.pi/pi-sdk.js"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .arewa-theme { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
+        .pi-gradient { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; }
         .cat-card.active { border: 2.5px solid #059669; background: #ecfdf5; transform: scale(1.05); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -20,8 +24,11 @@
 
     <header class="sticky top-0 z-50 glass-nav p-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-2">
-            <div class="w-10 h-10 arewa-theme rounded-2xl flex items-center justify-center text-white font-black shadow-lg">AM</div>
-            <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tight">Arewa-mart</h1>
+            <div class="w-10 h-10 pi-gradient rounded-2xl flex items-center justify-center text-white font-black shadow-lg">AM</div>
+            <div>
+                <h1 class="text-sm font-black text-emerald-950 uppercase tracking-tight leading-none">Arewa-mart</h1>
+                <span id="pi-user" class="text-[8px] text-emerald-600 font-bold uppercase">Guest Pioneer</span>
+            </div>
         </div>
         <button onclick="changeLang()" id="lang-btn" class="bg-emerald-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">ENGLISH</button>
     </header>
@@ -54,28 +61,18 @@
 
     <div id="ui-admin" class="hidden p-6">
         <h2 class="text-xl font-black text-emerald-900 mb-6 trans" data-ha="SASHIN ADMIN" data-en="ADMIN PANEL">SASHIN ADMIN</h2>
-        
         <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border space-y-4 mb-10">
-            <h3 class="font-bold text-xs uppercase text-gray-400 px-2">Loda Sabon Kaya</h3>
-            <input id="p-name" placeholder="Sunan Kaya/Aiki" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+            <input id="p-name" placeholder="Sunan Kaya" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
             <input id="p-price" type="number" placeholder="Farashi (Pi)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
             <select id="p-cat" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
-                <option value="tech">Tech & Phones</option>
-                <option value="fashion">Fashion & Wears</option>
-                <option value="agro">Agro & Food</option>
-                <option value="services">Services (Solar, Plumbing, etc)</option>
+                <option value="tech">Tech</option><option value="fashion">Fashion</option>
+                <option value="agro">Agro</option><option value="services">Services</option>
             </select>
-            <input id="p-img" placeholder="Link din hoto (Image URL)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
-            <button onclick="saveData()" class="w-full arewa-theme text-white py-4 rounded-2xl font-black shadow-lg">ADANA / SAVE</button>
+            <input id="p-img" placeholder="Link din hoto" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none">
+            <button onclick="saveData()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">SAVE ITEM</button>
         </div>
-
-        <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border">
-            <h3 class="font-bold text-xs uppercase text-red-500 mb-4 px-2">Goge Kaya (Manage Items)</h3>
-            <div id="admin-manage-list" class="space-y-3">
-                </div>
-        </div>
-        
-        <button onclick="exitAdmin()" class="w-full text-gray-400 text-xs font-bold py-8 uppercase">Koma Baya / Back</button>
+        <div id="admin-manage-list" class="space-y-3 bg-white p-4 rounded-3xl border"></div>
+        <button onclick="exitAdmin()" class="w-full py-8 text-gray-400 font-bold uppercase text-xs">Back</button>
     </div>
 
     <nav class="fixed bottom-6 left-6 right-6 h-16 glass-nav border rounded-full flex justify-around items-center shadow-2xl z-50">
@@ -84,6 +81,7 @@
     </nav>
 
     <script>
+        // FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAWJMF1tg5XoTtWAqZVeKdmNgufl-PFt3E",
             authDomain: "arewa-mart-1663d.firebaseapp.com",
@@ -93,9 +91,25 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let langMode = 'ha';
-        let filterNow = 'all';
+        // PI SDK INITIALIZATION
+        const Pi = window.Pi;
+        async function initPi() {
+            try {
+                const scopes = ['username', 'payments'];
+                function onIncompletePaymentFound(payment) { /* Handle incomplete payments */ };
+                
+                Pi.init({ version: "2.0", sandbox: true }); // Sandbox: true domin yanzu muna gwaji ne
+                
+                const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+                document.getElementById('pi-user').innerText = auth.user.username;
+                console.log("Pioneer Authenticated: " + auth.user.username);
+            } catch (err) {
+                console.log("Not in Pi Browser or error: ", err);
+            }
+        }
 
+        // Rest of the logic (Language, Filter, CRUD)
+        let langMode = 'ha'; let filterNow = 'all';
         function changeLang() {
             langMode = (langMode === 'ha') ? 'en' : 'ha';
             document.getElementById('lang-btn').innerText = (langMode === 'ha') ? 'ENGLISH' : 'HAUSA';
@@ -115,28 +129,17 @@
             const price = document.getElementById('p-price').value;
             const cat = document.getElementById('p-cat').value;
             const img = document.getElementById('p-img').value;
-            if(!name || !price || !img) return alert("Fill all fields!");
-
-            await db.collection("products").add({
-                name, price: parseFloat(price), category: cat, url: img,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert("Success!");
-            location.reload(); 
+            await db.collection("products").add({ name, price: parseFloat(price), category: cat, url: img, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+            location.reload();
         }
 
         function loadProducts() {
             const grid = document.getElementById('product-grid');
             const manageList = document.getElementById('admin-manage-list');
-            
             db.collection("products").orderBy("createdAt", "desc").onSnapshot(snap => {
-                grid.innerHTML = '';
-                manageList.innerHTML = '';
-                
+                grid.innerHTML = ''; manageList.innerHTML = '';
                 snap.forEach(doc => {
                     const p = doc.data();
-                    
-                    // User Grid Filter
                     if (filterNow === 'all' || p.category === filterNow) {
                         grid.innerHTML += `
                             <div class="bg-white p-2 rounded-[2rem] shadow-sm border border-white">
@@ -144,49 +147,25 @@
                                 <div class="px-2">
                                     <h4 class="text-[10px] font-black uppercase truncate text-emerald-950">${p.name}</h4>
                                     <p class="text-emerald-600 font-extrabold text-xs mb-3">${p.price} Pi</p>
-                                    <button class="w-full arewa-theme text-white py-2 rounded-2xl text-[9px] font-black uppercase shadow-md">${langMode === 'ha' ? 'SAYE' : 'BUY'}</button>
+                                    <button onclick="handlePayment('${p.name}', ${p.price})" class="w-full pi-gradient text-white py-2 rounded-2xl text-[9px] font-black uppercase shadow-md">${langMode === 'ha' ? 'SAYE' : 'BUY'}</button>
                                 </div>
                             </div>`;
                     }
-
-                    // Admin Management List (Delete Buttons)
-                    manageList.innerHTML += `
-                        <div class="flex justify-between items-center bg-gray-50 p-3 rounded-2xl border">
-                            <div class="flex items-center gap-3">
-                                <img src="${p.url}" class="w-10 h-10 rounded-lg object-cover">
-                                <div>
-                                    <p class="text-[10px] font-bold truncate w-32">${p.name}</p>
-                                    <p class="text-[8px] text-gray-400">${p.price} Pi</p>
-                                </div>
-                            </div>
-                            <button onclick="deleteProd('${doc.id}')" class="bg-red-500 text-white px-4 py-2 rounded-xl text-[9px] font-black uppercase">GOGE</button>
-                        </div>`;
+                    manageList.innerHTML += `<div class="flex justify-between items-center border-b py-2 text-[10px] font-bold"><span>${p.name}</span><button onclick="deleteProd('${doc.id}')" class="text-red-500">GOGE</button></div>`;
                 });
             });
         }
 
-        function enterAdmin() {
-            if(prompt("Password:") === "Zuhafs9700") {
-                document.getElementById('ui-main').classList.add('hidden');
-                document.getElementById('ui-admin').classList.remove('hidden');
-                loadProducts();
-            }
+        async function handlePayment(name, amount) {
+            alert(langMode === 'ha' ? "Ana kokarin hadawa da Pi Wallet..." : "Connecting to Pi Wallet...");
+            // Anan ne nan gaba zamu saka Pi.createPayment(...)
         }
 
-        function exitAdmin() {
-            document.getElementById('ui-main').classList.remove('hidden');
-            document.getElementById('ui-admin').classList.add('hidden');
-            loadProducts();
-        }
+        function enterAdmin() { if(prompt("Pass:") === "Zuhafs9700") { document.getElementById('ui-main').classList.add('hidden'); document.getElementById('ui-admin').classList.remove('hidden'); } }
+        function exitAdmin() { document.getElementById('ui-main').classList.remove('hidden'); document.getElementById('ui-admin').classList.add('hidden'); }
+        async function deleteProd(id) { if(confirm("Goge?")) await db.collection("products").doc(id).delete(); }
 
-        async function deleteProd(id) {
-            if(confirm("Kana son goge wannan?")) {
-                await db.collection("products").doc(id).delete();
-                alert("Deleted!");
-            }
-        }
-
-        window.onload = loadProducts;
+        window.onload = () => { initPi(); loadProducts(); };
     </script>
 </body>
 </html>
