@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arewa-mart Hub | @Bashful97</title>
     
-    <script src="https://sdk.mine.pi/pi-sdk.js"></script>
+    <script src="https://sdk.mine.pi/pi-sdk.js?v=2.0"></script>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
@@ -110,15 +110,21 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // PI SDK
+        // --- GYARAR PI SDK ---
         const Pi = window.Pi;
         async function initPi() {
             try {
-                Pi.init({ version: "2.0", sandbox: true });
+                // 1. AN CANJA SANDBOX ZUWA FALSE DON MAINNET CHECKLIST
+                Pi.init({ version: "2.0", sandbox: false });
+                
+                // 2. AUTHENTICATION DON TABBATAR DA CEWA KANA CIKIN BROWSER
                 await Pi.authenticate(['username', 'payments'], (onIncomplete) => {
                     console.log("Incomplete Payment: ", onIncomplete);
                 });
-            } catch (e) { console.warn("Pi SDK not ready yet"); }
+                console.log("Pi SDK Initialized Successfully");
+            } catch (e) { 
+                console.error("SDK Error: Tabbatar kana cikin Pi Browser."); 
+            }
         }
 
         let lang = 'ha'; let filter = 'all';
@@ -148,7 +154,6 @@
             closeAdmin();
         }
 
-        // STEP 10 FIX: Direct Pi Payment
         async function handlePayment(itemName, itemPrice) {
             try {
                 const paymentData = {
@@ -164,7 +169,7 @@
                 };
                 await Pi.createPayment(paymentData, callbacks);
             } catch (err) {
-                alert("Tabbatar kana cikin Pi Browser.");
+                alert("Kuskure ya faru wurin biya.");
             }
         }
 
@@ -198,7 +203,11 @@
         function closeAdmin() { document.getElementById('main-view').classList.remove('hidden'); document.getElementById('admin-view').classList.add('hidden'); }
         async function del(id) { if(confirm("Goge wannan kaya?")) await db.collection("products").doc(id).delete(); }
 
-        window.onload = () => { initPi(); render(); };
+        // 3. YIN AMFANI DA DOMCONTENTLOADED MAIMAKON WINDOW.ONLOAD
+        document.addEventListener("DOMContentLoaded", function() {
+            initPi();
+            render();
+        });
     </script>
 </body>
 </html>
