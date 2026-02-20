@@ -4,12 +4,12 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://app-cdn.pinetwork.com/ https://*.pinetwork.com https://minepi.com/;"
-        },
-        {
           "key": "X-Frame-Options",
           "value": "ALLOWALL"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         }
       ]
     }
