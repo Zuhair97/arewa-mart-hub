@@ -6,7 +6,6 @@
     <title>Arewa-mart Hub | @Bashful97</title>
     
     <script src="https://sdk.mine.pi/pi-sdk.js"></script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
@@ -78,7 +77,7 @@
                 <option value="tech">Tech</option><option value="fashion">Fashion</option>
                 <option value="agro">Agro</option><option value="services">Services</option>
             </select>
-            <input id="in-img" placeholder="Manna Direct Link (Postimg)" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
+            <input id="in-img" placeholder="Link din hoto" class="w-full p-4 bg-gray-50 rounded-2xl border outline-none text-sm">
             <button onclick="publish()" class="w-full pi-gradient text-white py-4 rounded-2xl font-black shadow-lg">LODA KAYA</button>
         </div>
         <div id="manage-list" class="space-y-3 bg-white p-4 rounded-3xl border mb-20"></div>
@@ -89,7 +88,7 @@
         <div class="bg-white w-full max-h-[70vh] rounded-[3rem] p-8 relative overflow-y-auto">
             <h2 class="font-black text-emerald-900 mb-4 uppercase text-sm">Privacy Policy</h2>
             <div class="text-[11px] text-gray-500 space-y-4">
-                <p>Arewa-mart Hub developed by @Bashful97. We only use Pi username for order processing. No wallet passphrases are ever requested.</p>
+                <p>Arewa-mart Hub developed by @Bashful97. Muna amfani da sunan Pi ne kawai don tsarin oda.</p>
             </div>
             <button onclick="togglePrivacy(false)" class="w-full pi-gradient text-white py-4 rounded-2xl font-black mt-8">OK</button>
         </div>
@@ -101,6 +100,7 @@
     </nav>
 
     <script>
+        // MUHIMMI: Tunda Portal dinka yana nuna "Pi Testnet", dole mu bar sandbox a matsayin TRUE
         const firebaseConfig = {
             apiKey: "AIzaSyAWJMF1tg5XoTtWAqZVeKdmNgufl-PFt3E",
             authDomain: "arewa-mart-1663d.firebaseapp.com",
@@ -110,39 +110,53 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // --- GYARAR PI SDK ---
         const Pi = window.Pi;
         async function initPi() {
             try {
-                // 1. AN CANJA SANDBOX ZUWA FALSE DON MAINNET CHECKLIST
-                Pi.init({ version: "2.0", sandbox: false });
-                
-                // 2. AUTHENTICATION DON TABBATAR DA CEWA KANA CIKIN BROWSER
+                // AN MAYAR ZUWA TRUE DOMIN YA DAICE DA TESTNET DINKA
+                Pi.init({ version: "2.0", sandbox: true });
                 await Pi.authenticate(['username', 'payments'], (onIncomplete) => {
                     console.log("Incomplete Payment: ", onIncomplete);
                 });
-                console.log("Pi SDK Initialized Successfully");
             } catch (e) { 
-                console.error("SDK Error: Tabbatar kana cikin Pi Browser."); 
+                console.error("SDK Error."); 
+            }
+        }
+
+        async function handlePayment(itemName, itemPrice) {
+            try {
+                const paymentData = {
+                    amount: parseFloat(itemPrice),
+                    memo: "Gwajin Saye: " + itemName,
+                    metadata: { productName: itemName }
+                };
+                
+                const callbacks = {
+                    onReadyForServerApproval: (paymentId) => { console.log("ID:", paymentId); },
+                    onReadyForServerCompletion: (paymentId, txid) => { alert("Nasara! ID: " + txid); },
+                    onCancel: (paymentId) => { console.log("An fasa"); },
+                    onError: (error, payment) => { alert("Kuskure: " + error.message); }
+                };
+
+                await Pi.createPayment(paymentData, callbacks);
+            } catch (err) {
+                alert("Kuskure ya faru wurin kiran SDK.");
             }
         }
 
         let lang = 'ha'; let filter = 'all';
-
         function changeLang() {
             lang = (lang === 'ha') ? 'en' : 'ha';
             document.getElementById('lang-btn').innerText = (lang === 'ha') ? 'ENGLISH' : 'HAUSA';
             document.querySelectorAll('.trans').forEach(el => el.innerText = el.getAttribute('data-' + lang));
             render();
         }
-
         function setTab(t) {
             filter = t;
             document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
             document.getElementById('tab-' + t).classList.add('active');
             render();
         }
-
         async function publish() {
             const name = document.getElementById('in-name').value;
             const price = document.getElementById('in-price').value;
@@ -153,26 +167,6 @@
             alert("An adana!");
             closeAdmin();
         }
-
-        async function handlePayment(itemName, itemPrice) {
-            try {
-                const paymentData = {
-                    amount: parseFloat(itemPrice),
-                    memo: "Siyan " + itemName + " a Arewa-mart Hub",
-                    metadata: { productName: itemName }
-                };
-                const callbacks = {
-                    onReadyForServerApproval: (id) => { console.log("Approved", id); },
-                    onReadyForServerCompletion: (id, txid) => { alert("Nasara! Transaction ID: " + txid); },
-                    onCancel: (id) => { alert("An fasa biya."); },
-                    onError: (e, p) => { alert("Error: " + e.message); }
-                };
-                await Pi.createPayment(paymentData, callbacks);
-            } catch (err) {
-                alert("Kuskure ya faru wurin biya.");
-            }
-        }
-
         function render() {
             const grid = document.getElementById('item-grid');
             const manage = document.getElementById('manage-list');
@@ -197,13 +191,11 @@
                 });
             });
         }
-
         function togglePrivacy(s) { document.getElementById('privacy-modal').classList.toggle('hidden', !s); }
         function openAdmin() { if(prompt("Password:") === "Zuhafs9700") { document.getElementById('main-view').classList.add('hidden'); document.getElementById('admin-view').classList.remove('hidden'); } }
         function closeAdmin() { document.getElementById('main-view').classList.remove('hidden'); document.getElementById('admin-view').classList.add('hidden'); }
         async function del(id) { if(confirm("Goge wannan kaya?")) await db.collection("products").doc(id).delete(); }
 
-        // 3. YIN AMFANI DA DOMCONTENTLOADED MAIMAKON WINDOW.ONLOAD
         document.addEventListener("DOMContentLoaded", function() {
             initPi();
             render();
